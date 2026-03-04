@@ -4,7 +4,8 @@ import asyncio
 
 async def init_database():
     async with engine.begin() as conn:
-        pass
-
+        await conn.execute(text("CREATE EXTENSION IF NOT EXISTS vector"))
+        await conn.run_sync(Base.metadata.create_all)
+        
 if __name__ == "__main__":
     asyncio.run(init_database())
