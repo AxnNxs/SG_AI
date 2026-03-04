@@ -1,0 +1,50 @@
+services:
+  # Database per utenti e sessioni
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: ia_platform
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password_sicura
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # Vector DB per la storia "infinita" (Estensione di Postgres)
+  vector_db:
+    image: ankane/pgvector:latest
+    environment:
+      POSTGRES_DB: vector_store
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password_sicura
+    ports:
+      - "5433:5432"
+
+  # Motore di Inferenza (La tua RTX 4080)
+  inference_server:
+    image: ollama/ollama
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    volumes:
+      - ollama_storage:/root/.ollama
+
+  # Il tuo Backend (da scrivere in FastAPI)
+  backend_api:
+    build: ./backend
+    depends_on:
+      - db
+      - vector_db
+      - inference_server
+    environment:
+      - DATABASE_URL=postgresql://admin:password_sicura@db:5432/ia_platform
+      - OLLAMA_URL=http://inference_server:11434
+    ports:
+      - "8000:8000"
+
+volumes:
+  postgres_data:
+  ollama_storage:
