@@ -1,4 +1,5 @@
-from database import engine, Base
+from database import engine
+from models import Base
 from sqlalchemy import text
 import asyncio
 

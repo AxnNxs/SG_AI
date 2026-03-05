@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Text, Index
 from sqlalchemy.orm import declarative_base, relationship
-from datetime import datetime
+from datetime import datetime, timezone
 from pgvector.sqlalchemy import Vector
 
 Base = declarative_base()
@@ -24,7 +24,7 @@ class Message(Base):
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     role = Column(String, nullable=False) # "user" o "assistant"
     content = Column(Text, nullable=False)
-    timestamp = Column(DateTime, default=datetime.now(datetime.timezone.utc))
+    timestamp = Column(DateTime, default=datetime.now(timezone.utc))
 
     user = relationship("User", back_populates="messages")
 

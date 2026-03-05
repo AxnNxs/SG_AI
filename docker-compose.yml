@@ -14,12 +14,17 @@ services:
   vllm:
     image: vllm/vllm-openai:latest
     container_name: ia_vllm
+    environment:
+      - HUGGING_FACE_HUB_TOKEN=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
     command: >
-      --model mistralai/Mistral-7B-Instruct-v0.3
-      --max-model-len 4096
+      --model Qwen/Qwen2.5-7B-Instruct-AWQ
+      --quantization awq
+      --max-model-len 2048
       --gpu-memory-utilization 0.8
     deploy:
       resources:
+        limits:
+          memory: 16G
         reservations:
           devices:
             - driver: nvidia

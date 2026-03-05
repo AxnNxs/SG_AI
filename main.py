@@ -1,8 +1,16 @@
+import openai
+import asyncio
+# Se vuoi usare le API di Forge per le immagini, tieni requests
 import requests
-import ollama
+
+# Configurazione vLLM (Il tuo container Docker)
+client = openai.OpenAI(
+    base_url="http://localhost:8000/v1",
+    api_key="vllm-token" # Stringa casuale, vLLM non la controlla
+)
 
 def load_charm(file):
-    """Legge il contenuto del Modelfile e lo pulisce per Python."""
+    """Legge il contenuto del Modelfile e lo pulisce."""
     try:
         with open(file, 'r', encoding='utf-8') as f:
             content = f.read()
