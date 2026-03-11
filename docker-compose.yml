@@ -14,17 +14,23 @@ services:
   vllm:
     image: vllm/vllm-openai:latest
     container_name: ia_vllm
+    runtime: nvidia
+    volumes:
+      # Mappiamo la cartella locale in modo che vLLM la veda come /app/model
+      - ./.ai:/app/model
     environment:
-      - HUGGING_FACE_HUB_TOKEN=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
+      - HF_HUB_OFFLINE=1  # Disabilita completamente le chiamate internet
+      - CUDA_VISIBLE_DEVICES=0 # Assicurati di puntare alla tua 4080
     command: >
-      --model Qwen/Qwen2.5-7B-Instruct-AWQ
+      /app/model
       --quantization awq
-      --max-model-len 2048
-      --gpu-memory-utilization 0.8
+      --max-model-len 8192
+      --gpu-memory-utilization 0.7
+      --enforce-eager
     deploy:
       resources:
         limits:
-          memory: 16G
+          memory: 10G
         reservations:
           devices:
             - driver: nvidia

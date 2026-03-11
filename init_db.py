@@ -1,4 +1,4 @@
-from database import engine
+from db_manager import engine
 from models import Base
 from sqlalchemy import text
 import asyncio
