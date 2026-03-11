@@ -66,7 +66,10 @@ async def promptGen():
                 # CORREZIONE: Usa il client OpenAI (che punta a vLLM) invece di ollama
                 ans = client.chat.completions.create(
                     model="/app/model",  # Nome del modello definito nel Docker
-                    messages=req
+                    messages=req,
+                    temperature=0.8,        # <--- AGGIUNGI QUI (Valore tra 0 e 2)
+                    presence_penalty=1.2,   # <--- AGGIUNGI QUI (Valore tra -2 e 2)
+                    max_tokens=50           # Opzionale: limita la lunghezza della risposta
                 )
                 
                 # Estrazione corretta della risposta dall'oggetto OpenAI
