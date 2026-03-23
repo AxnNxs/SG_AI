@@ -14,7 +14,8 @@ Execute in this order for first sturtup:
 For further restarts:
 - docker-compose up -d <- avvia ambiente ia
 - docker logs -f ia_vllm <- avvia ia
-- main.py <- avvia chat con ia
+- .\cloudflared-windows-amd64.exe tunnel --protocol http2  --url http://localhost:8501 <- apertura indirizzo web temporaneo
+- streamlit run web_app.py <- avvia chat con ia con interfaccia web
 
 for customization:
 - modify .mf file in runtime
